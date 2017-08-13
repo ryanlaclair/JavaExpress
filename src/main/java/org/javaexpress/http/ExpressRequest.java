@@ -1,10 +1,11 @@
 package org.javaexpress.http;
 
 import org.eclipse.jetty.server.Request;
+import org.javaexpress.router.Route;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -12,56 +13,54 @@ import java.util.stream.Collectors;
  */
 public class ExpressRequest {
 
-    private String body;
-    private String hostname;
-    private HTTPMethod method;
-    private Map<String, String> params;
-    private String path;
-    private String protocol;
-    private Map<String, String[]> query;
+    private Request request;
+    private Route route = null;
 
-    public ExpressRequest(Request request) throws IOException {
-        this.body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-        this.hostname = request.getRemoteHost();
-        this.method = HTTPMethod.valueOf(request.getMethod().toUpperCase());
-        this.params = new HashMap<String, String>();
-        this.path = request.getPathInfo();
-        this.protocol = request.getProtocol();
-        this.query = request.getParameterMap();
-
-        parseParams();
+    public ExpressRequest(Request request) {
+        this.request = request;
     }
 
-    public String body() {
-        return this.body;
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public String body() throws IOException {
+        return this.request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
     }
 
     public String hostname() {
-        return this.hostname;
+        return this.request.getRemoteHost();
     }
 
     public HTTPMethod method() {
-        return this.method;
+        return HTTPMethod.valueOf(this.request.getMethod().toUpperCase());
     }
 
     public Map<String, String> params() {
-        return this.params;
+        Map<String, String> params = new HashMap<String, String>();
+
+        String[] routeParts = route.getPath().split("/");
+        String[] pathParts = path().split("/");
+
+        for (int i=0; i<routeParts.length; i++) {
+            if (routeParts[i].startsWith(":")) {
+                params.put(routeParts[i].substring(1), pathParts[i]);
+            }
+        }
+
+        return params;
     }
 
     public String path() {
-        return this.path;
+        return this.request.getPathInfo();
     }
 
     public String protocol() {
-        return this.protocol;
+        return this.request.getProtocol();
     }
 
     public Map<String, String[]> query() {
-        return this.query;
-    }
-
-    private void parseParams() {
-        // parse the route parameters
+        return this.request.getParameterMap();
     }
 
 }

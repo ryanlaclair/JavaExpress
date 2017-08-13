@@ -6,7 +6,10 @@ import org.javaexpress.http.HTTPMethod;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Ryan LaClair - rlaclair@bu.edu
@@ -51,12 +54,11 @@ public class Router {
     }
 
     public void route(ExpressRequest req, ExpressResponse res) throws IOException {
-        System.out.println("ROUTING...");
-
         Route route = findRoute(req);
         if (route != null) {
-            RouteHandler handler = route.getHandler();
+            req.setRoute(route);
 
+            RouteHandler handler = route.getHandler();
             handler.handle(req, res);
         }
         else {
@@ -71,9 +73,19 @@ public class Router {
 
     private Route findRoute(ExpressRequest req) {
         for (Route route : this.routes) {
-            if ((route.getMethod().equals(req.method())) &&
-                    (route.getPath().equals(req.path()))) {
-                return route;
+            if (route.getMethod().equals(req.method())) {
+                String[] routeParts = route.getPath().split("/");
+                String[] pathParts = req.path().split("/");
+
+                if (routeParts.length == pathParts.length) {
+                    for (int i=0; i<routeParts.length; i++) {
+                        if ((!routeParts[i].startsWith(":")) && (!routeParts[i].equals(pathParts[i]))) {
+                            return null;
+                        }
+                    }
+
+                    return route;
+                }
             }
         }
 

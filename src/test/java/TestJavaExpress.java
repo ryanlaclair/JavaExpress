@@ -8,13 +8,19 @@ public class TestJavaExpress {
     public static void main(String[] args) throws Exception {
         JavaExpress app = new JavaExpress();
 
-        app.get("/", (req, res) -> {
+        app.get("/dogs/:id", (req, res) -> {
+            System.out.println(req.params().get("id"));
+            res.send("GET");
+        });
+
+        app.get("/dogs/:id/:name", (req, res) -> {
+            System.out.println(req.params().get("id"));
+            System.out.println(req.params().get("name"));
             res.send("GET");
         });
 
         app.post("/dog", (req, res) -> {
             System.out.println(req.body());
-            res.append("this", "dog");
             res.send("POST");
         });
 
