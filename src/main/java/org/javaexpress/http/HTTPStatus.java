@@ -55,4 +55,10 @@ public enum HTTPStatus {
     public String getReason() {
         return this.reason;
     }
+
+
+    @Override
+    public String toString() {
+        return this.value + " - " + this.reason;
+    }
 }

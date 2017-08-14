@@ -3,6 +3,8 @@ package org.javaexpress.router;
 import org.javaexpress.http.ExpressRequest;
 import org.javaexpress.http.ExpressResponse;
 import org.javaexpress.http.HTTPMethod;
+import org.javaexpress.http.HTTPStatus;
+import org.javaexpress.server.HTTPServer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,8 +64,7 @@ public class Router {
             handler.handle(req, res);
         }
         else {
-            // route not found
-            System.out.println("Route not found");
+            res.status(HTTPStatus.NOT_FOUND).send(HTTPStatus.NOT_FOUND.toString());
         }
     }
 

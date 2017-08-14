@@ -14,36 +14,50 @@ public class ExpressResponse {
         this.response = response;
     }
 
-    public void append(String field, String value) {
+    public ExpressResponse append(String field, String value) {
         this.response.addHeader(field, value);
+
+        return this;
     }
 
-    public void location(String path) {
+    public ExpressResponse location(String path) {
         set("Location", path);
+
+        return this;
     }
 
-    public void redirect(HTTPStatus status, String path) throws IOException {
+    public ExpressResponse redirect(HTTPStatus status, String path) throws IOException {
         this.response.setStatus(status.getValue());
         this.response.sendRedirect(path);
+
+        return this;
     }
 
-    public void send(String body) throws IOException {
+    public ExpressResponse send(String body) throws IOException {
         set("Server", "JavaExpress");
 
         this.response.getWriter().write(body);
         this.response.getWriter().flush();
+
+        return this;
     }
 
-    public void sendStatus(HTTPStatus status) {
+    public ExpressResponse status(HTTPStatus status) {
         this.response.setStatus(status.getValue());
+
+        return this;
     }
 
-    public void set(String field, String value) {
+    public ExpressResponse set(String field, String value) {
         this.response.setHeader(field, value);
+
+        return this;
     }
 
-    public void type(String type) {
+    public ExpressResponse type(String type) {
         this.response.setContentType(type);
+
+        return this;
     }
 
 }
