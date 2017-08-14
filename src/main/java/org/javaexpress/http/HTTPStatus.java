@@ -1,6 +1,8 @@
 package org.javaexpress.http;
 
 /**
+ * This enumeration represents the different possible HTTP status codes.
+ *
  * @author Ryan LaClair - rlaclair@bu.edu
  */
 public enum HTTPStatus {
@@ -43,22 +45,44 @@ public enum HTTPStatus {
     private int value;
     private String reason;
 
+    /**
+     * Create a new HTTPStatus.
+     *
+     * @param value the value
+     * @param reason the String reason
+     */
     HTTPStatus(int value, String reason) {
         this.value = value;
         this.reason = reason;
     }
 
+    /**
+     * Get the status value.
+     *
+     * @return the value
+     */
     public int getValue() {
         return this.value;
     }
 
+    /**
+     * Get the status reason.
+     *
+     * @return a String of the reason
+     */
     public String getReason() {
         return this.reason;
     }
 
 
+    /**
+     * A String representation of the HTTPStatus.
+     *
+     * @return the String representation
+     */
     @Override
     public String toString() {
         return this.value + " - " + this.reason;
     }
+
 }
