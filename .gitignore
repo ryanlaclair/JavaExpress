@@ -5,5 +5,6 @@
 *.pdf
 *.docx
 *.zip
+*.iml
 
 target
