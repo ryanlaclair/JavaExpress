@@ -7,7 +7,7 @@ A Java web application framework based on [ExpressJS](https://expressjs.com/).
 JavaExpress uses [Maven](https://maven.apache.org/) to manage dependencies and build. After cloning this repository, to build a JAR file simply run:
 
 ```
-maven package
+mvn package
 ```
 
 To install the package to your local repository for use as a dependency in other Maven projects, run:
